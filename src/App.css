@@ -3,3 +3,54 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.login-name {
+  font-size: 2rem;
+}
+
+.login-btn {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 4rem;
+  border-radius: 8px;
+  padding: 6px 1rem;
+}
+
+.sign-in-btn {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 4rem;
+  border-radius: 8px;
+  padding: 6px 1rem;
+}
+
+.reset-password {
+  color: blueviolet;
+  font-size: small;
+  transition: ease-in-out;;
+}
+
+.reset-password:hover {
+  font-size: medium;
+  text-decoration: underline;
+}
+
+.register {
+  color: blueviolet;
+  font-size: medium;
+  transition: ease-in-out;;
+}
+
+.register:hover {
+  font-size: large;
+  text-decoration: underline;
+}
+
+.error-password,.error-email {
+  font-size: small;
+  color: red;
+}

@@ -7,31 +7,31 @@ import card5 from "../assets/images/card5.jpg";
 export const cardData = [
   {
     id: "1",
-    name: "Vikram",
+    name: "Villiam",
     image: card1,
     status: "Online",
   },
   {
     id: "2",
-    name: "Samantha",
+    name: "Ivana",
     image: card2,
     status: "Online",
   },
   {
     id: "3",
-    name: "Dhruv",
+    name: "John",
     image: card3,
     status: "Offline",
   },
   {
     id: "4",
-    name: "GVM",
+    name: "Kijin",
     image: card4,
     status: "Online",
   },
   {
     id: "5",
-    name: "Pooja Hegde",
+    name: "Lily",
     image: card5,
     status: "Offline",
   },
