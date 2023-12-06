@@ -50,7 +50,11 @@
   text-decoration: underline;
 }
 
-.error-password,.error-email {
+.error-password,.error-email,.error-name {
   font-size: small;
   color: red;
+}
+
+.register-name {
+  font-size: 2rem;
 }

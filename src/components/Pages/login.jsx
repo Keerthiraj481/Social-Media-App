@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { AuthContext } from "../context/context";
 
 const Login = () => {
+
+  const { signInWithGoogle } = useContext(AuthContext);
+
+
   let initialValues = {
     email: "",
     password: "",
@@ -44,18 +49,19 @@ const Login = () => {
             />
             <div className="flex flex-col justify-center items-center">
               <div className="flex flex-col justify-center items-center">
-                <p className="font-roboto font-extrabold text-3xl mb-2">
+                <div className="font-roboto font-extrabold text-3xl mb-2">
                   Hello, <br /> <span>Welcome Back</span>
-                </p>
-                <p className="login-name px-[6rem] py-[2rem] bg-violet-600 text-white font-extrabold rounded-lg">
+                </div>
+                <div className="login-name px-[6rem] py-[2rem] bg-violet-600 text-white font-extrabold rounded-lg">
                   LOGIN
-                </p>
+                </div>
               </div>
               <main className="flex flex-col justify-center items-center">
                 <form onSubmit={handleSubmit}>
                   <div>
                     <input
                       type="email"
+                      placeholder="Email"
                       name="email"
                       label="email"
                       className="mt-1 px-3 pr-24 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
@@ -72,6 +78,7 @@ const Login = () => {
                   <div>
                     <input
                       type="password"
+                      placeholder="Password"
                       name="password"
                       label="password"
                       className="mt-1 px-3 pr-24 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
@@ -86,7 +93,7 @@ const Login = () => {
                     </div>
                   </div>
                   <button
-                    className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 ... px-6 font-bold login-btn"
+                    className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 ... px-6 font-bold login-btn ml-[5rem]"
                     type="submit"
                     variant="gradient"
                   >
@@ -94,21 +101,21 @@ const Login = () => {
                   </button>
                 </form>
               </main>
-              <div>
-                <button className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 ... px-6 font-bold sign-in-btn">
+              <div className="-my-4">
+                <button className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 ... px-6 font-bold sign-in-btn" onClick={signInWithGoogle}>
                   SIGN IN WITH GOOGLE
                 </button>
                 <Link to="/reset">
-                  <p className="font-bold reset-password mt-0 my-4 flex flex-col justify-center items-center">
+                  <div className="font-bold reset-password mt-0 my-4 flex flex-col justify-center items-center">
                     Reset the Password
-                  </p>
+                  </div>
                 </Link>
-                <p className="flex flex-col justify-center items-center">
+                <div className="flex flex-col justify-center items-center">
                   Don't have an account?
                   <Link to="/register">
-                    <p className="font-bold register mx-2">Register</p>
+                    <div className="font-bold register mx-2">Register</div>
                   </Link>
-                </p>
+                </div>
               </div>
             </div>
           </div>
