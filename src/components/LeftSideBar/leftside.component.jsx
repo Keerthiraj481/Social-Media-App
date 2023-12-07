@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
+import { AuthContext } from "../context/context";
 
 const LeftSide = () => {
+
+  const { user, userData } = useContext(AuthContext);
+
   return (
     <div className="flex flex-col h-screen bg-white pb-4 border-2 rounded-r-xl shadow-lg">
       <div className="flex flex-col items-center relative">
@@ -24,7 +28,7 @@ const LeftSide = () => {
       </div>
       <div className="flex flex-col items-center pt-6">
         <p className="font-roboto font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
-          User email
+          {user?.email || userData?.email}
         </p>
         <p className="font-roboto font-medium text-xs text-gray-700 no-underline tracking-normal leading-none py-1">
           Access exclusive tools & insights

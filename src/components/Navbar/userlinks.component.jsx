@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
-import { Avatar } from "@material-tailwind/react"
+import { Avatar } from "@material-tailwind/react";
+import { AuthContext } from "../context/context"; 
 
 const UserLinks = () => {
+
+  const { signOutUser, user, userData } = useContext(AuthContext);
+
   return (
     <div className="flex justify-center items-center cursor-pointer">
       <div className="hover:translate-y-1 duration-500 ease-in-out hover:text-blue-500">
@@ -54,7 +58,7 @@ const UserLinks = () => {
           />
         </svg>
       </div>
-      <div className="mx-4 flex items-center">
+      <div className="mx-4 flex items-center" onClick={signOutUser}>
         <Tippy content="Sign Out">
           <img
             src="src\assets\images\avatar.jpg"
@@ -62,7 +66,9 @@ const UserLinks = () => {
             className="flex w-[3rem] h-[2.8rem] rounded-md"
           />
         </Tippy>
-        <p className="ml-4 text-sm text-black font-medium no-underline">User</p>
+        <p className="ml-4 text-sm text-black font-medium no-underline">
+          {user?.displayName === null && userData?.name !== undefined ? userData?.name?.charAt(0)?.toUpperCase() + userData?.name?.slice(1) : user?.displayName?.split(" ")[0]}
+        </p>
       </div>
     </div>
   );

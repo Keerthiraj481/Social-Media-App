@@ -1,7 +1,18 @@
 import React, { createContext, useState, useEffect } from "react";
-import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "firebase/auth";
+import { 
+    GoogleAuthProvider, 
+    signInWithPopup, 
+    signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, 
+    signOut 
+} from "firebase/auth";
 import { auth, db, onAuthStateChanged } from "../firebase/firebase";
-import { query, where, collection, getDocs } from "firebase/firestore"; 
+import { query, 
+    where, 
+    collection, 
+    getDocs,
+    addDoc,
+    onSnapshot, 
+} from "firebase/firestore"; 
 import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
@@ -19,8 +30,8 @@ const Context = ({ children }) => {
         try{
             const popup = await signInWithPopup(auth, provider);
             const user = popup.user;
-            const querri = query(collectionUserRef, where("uid", "==", user.uid));
-            const docs = await getDocs(querri);
+            const q = query(collectionUserRef, where("uid", "==", user.uid));
+            const docs = await getDocs(q);
             if (docs.docs.length === 0) {
             await addDoc(collectionUserRef, {
             uid: user?.uid,
@@ -35,7 +46,7 @@ const Context = ({ children }) => {
         }
     };
 
-    const loginWithUserAndEmail = async (email, password) => {
+    const loginWithEmailAndPassword = async (email, password) => {
         try{
             await signInWithEmailAndPassword(auth, email, password);
         }catch (err) {
@@ -60,7 +71,7 @@ const Context = ({ children }) => {
         }
     };
 
-    const sendPasswordToUser = async () => {
+    const sendPasswordToUser = async (email) => {
         try {
             await sendPasswordResetEmail(auth, email);
             alert("New password send to your email");
@@ -75,27 +86,18 @@ const Context = ({ children }) => {
 
     };
 
-    const initialState = {
-      signInWithGoogle: signInWithGoogle,
-      loginWithUserAndEmail: loginWithUserAndEmail,
-      registerWithEmailAndPassword: registerWithEmailAndPassword,
-      sendPasswordToUser: sendPasswordToUser,
-      signOutUser: signOutUser,
-      user: user,
-      userData: userData,
-    };
 
     const userStateChanged = async () => {
-        onAuthStateChanged(auth, async () => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
-                const querri = query(collectionUserRef, where ("uid","==", user?.uid));
+                const q = query(collectionUserRef, where ("uid","==", user?.uid));
                 await onSnapshot(q, (doc) => {
                     setUserData(doc?.docs[0]?.data());
                 });
                 setUser(user);
             } else {
                 setUser(null);
-                navigate('/login')
+                navigate("/login");
             }
         });
     };
@@ -110,6 +112,16 @@ const Context = ({ children }) => {
         return () => userStateChanged();
     }, []);
 
+
+    const initialState = {
+      signInWithGoogle: signInWithGoogle,
+      loginWithEmailAndPassword: loginWithEmailAndPassword,
+      registerWithEmailAndPassword: registerWithEmailAndPassword,
+      sendPasswordToUser: sendPasswordToUser,
+      signOutUser: signOutUser,
+      user: user,
+      userData: userData,
+    };
 
 
     return ( 

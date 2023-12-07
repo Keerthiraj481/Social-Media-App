@@ -1,12 +1,30 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { AuthContext } from "../context/context";
+import { auth, onAuthStateChanged } from "../firebase/firebase";
 
 const Login = () => {
 
-  const { signInWithGoogle } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+
+  const { signInWithGoogle, loginWithEmailAndPassword } =
+    useContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setLoading(true);
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/");
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    });
+  }, [navigate]);
 
 
   let initialValues = {
@@ -14,28 +32,28 @@ const Login = () => {
     password: "",
   };
 
-
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email address").required("Required"),
-    password: Yup.string().required("Required").min("6","Must be at least 6 characters long")
-    .matches(/^[a-zA-Z]+$/, "Password can only letters"),
+    password: Yup.string()
+      .required("Required")
+      .min("6", "Must be at least 6 characters long")
+      .matches(/^[a-zA-Z]+$/, "Password can only letters"),
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = formik.values;
     if (formik.isValid === true) {
-      alert("Good");
-    }else {
+      loginWithEmailAndPassword(email, password);
+      setLoading(true);
+    } else {
+      setLoading(false);
       alert("Check your Input Feilds");
     }
-    console.log('formik', formik)
+    console.log("formik", formik);
   };
 
   const formik = useFormik({ initialValues, validationSchema, handleSubmit });
-
-
-
 
   return (
     <div className="bg-white">
@@ -70,9 +88,7 @@ const Login = () => {
                   </div>
                   <div>
                     {formik.touched.email && formik.errors.email && (
-                      <div className="error-email">
-                        {formik.errors.email}
-                      </div>
+                      <div className="error-email">{formik.errors.email}</div>
                     )}
                   </div>
                   <div>
@@ -102,7 +118,10 @@ const Login = () => {
                 </form>
               </main>
               <div className="-my-4">
-                <button className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 ... px-6 font-bold sign-in-btn" onClick={signInWithGoogle}>
+                <button
+                  className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 ... px-6 font-bold sign-in-btn"
+                  onClick={signInWithGoogle}
+                >
                   SIGN IN WITH GOOGLE
                 </button>
                 <Link to="/reset">
