@@ -5,6 +5,8 @@ import { doc, setDoc, collection, serverTimestamp, query, orderBy, onSnapshot } 
 import { db } from "../firebase/firebase";
 import { PostsReducer, postActions, postsStates } from "../context/reducer";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { Alert } from "@material-tailwind/react";
+import PostCard from "./postcard";
 
 
 const Main = () => {
@@ -27,6 +29,7 @@ const Main = () => {
   };
 
   const handleSubmitPost = async (e) => {
+    e.preventDefault();
     if(text.current.value !== "") {
     try {
         await setDoc(postRef, {
@@ -57,7 +60,7 @@ const Main = () => {
   };
 
   const submitImage = async () => {
-    const fileType = metadata.contentType(file["type"]);
+    const fileType = metadata.contentType.includes(file["type"]);
     console.log("file", file);
     if (!file) return;
     if(fileType) {
@@ -98,14 +101,15 @@ const Main = () => {
       await onSnapshot(q, (doc) => {
         dispatch({
           type: SUBMIT_POST,
-          posts: doc.data().map((item) => item.data()),
+          posts: doc.docs.map((item) => item.data()),
         });
-        scrollRef.current?.ScrollIntoView({ behavior: "smooth" });
+        scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
         setImage(null);
         setFile(null);
         setProgressBar(0);
       });
     };
+    return () => PostData();
   }, [SUBMIT_POST]);
 
   return (
@@ -125,7 +129,9 @@ const Main = () => {
                 <input
                   type="text"
                   name="text"
-                  placeholder={`Whats on your mind ${user?.displayName?.split(" ")[0] || userData?.name?.charAt(0).toUpperCase() + userData?.name?.slice(1)
+                  placeholder={`Whats on your mind ${
+                    user?.displayName?.split(" ")[0] || 
+                    userData?.name?.charAt(0).toUpperCase() + userData?.name?.slice(1)
                 }`}
                   className="outline-none w-full ml-4 bg-white rounded-md"
                   ref = {text}
@@ -193,8 +199,34 @@ const Main = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col py-4 w-full">{/* posts */}</div>
-      <div>{/* reference for */}</div>
+      <div className="flex flex-col py-4 w-full">{state.error ? (
+      <div className="flex justify-center items-center">
+        <Alert color="red">
+          Something went wrong refresh and try again...
+        </Alert>
+      </div>
+      ) : (
+        <div>
+          {state.posts.length > 0 && state?.posts?.map((post, index) => {
+            return (
+              <PostCard 
+              key={index}
+              logo={post.logo}
+              id={post.documentId}
+              uid={post?.uid}
+              name={post.name}
+              email={post.email}
+              image={post.image}
+              text={post.text}
+              // timestamp={new Date(post?.timestamp?.toDate()?.toUTCString())
+              // }
+              >
+              </PostCard>
+            )
+          })}
+        </div>
+      )}</div>
+      <div ref={scrollRef}>{/* reference for */}</div>
     </div>
   );
 };
