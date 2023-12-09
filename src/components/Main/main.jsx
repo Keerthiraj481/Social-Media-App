@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext, useReducer } from "react";
+import React, { useState, useRef, useContext, useReducer, useEffect } from "react";
 import { Avatar, button } from "@material-tailwind/react";
 import { AuthContext } from "../context/context";
 import { doc, setDoc, collection, serverTimestamp, query, orderBy, onSnapshot } from "firebase/firestore";
@@ -22,6 +22,10 @@ const Main = () => {
   const [progressBar, setProgressBar] = useState(0)
 
 
+  const handleUpload = (e) => {
+    setFile(e.target.files[0]);
+  };
+
   const handleSubmitPost = async (e) => {
     if(text.current.value !== "") {
     try {
@@ -36,7 +40,6 @@ const Main = () => {
           timestamp: serverTimestamp(),
         });
         text.current.value = "";
-      }
     } catch (err) {
       dispatch({ type: HANDLE_ERROR });
       alert(err.message);
@@ -142,7 +145,7 @@ const Main = () => {
             </div>
           </form>
         </div>
-        <span>{/* put playBar */}</span>
+        <span style={{ width: `${progressBar}%` }} className="bg-blue-700 py-1 rounded-md"></span>
         <div className="flex justify-around items-center pt-4">
           <div className="flex items-center">
             <label
@@ -154,14 +157,19 @@ const Main = () => {
                 alt="addImage"
                 className="w-[3rem] h-10 mr-4"
               />
-              <input type="file" id="addImage" style={{ display: "none" }} />
+              <input 
+              type="file" id="addImage" 
+              style={{ display: "none" }}
+              onChange={handleUpload} />
             </label>
-            <button
+            {file && <button
               variant="text"
               className="font-roboto font font-medium text-md text-gray-700 no-underline tracking-normal leading-none"
+              onClick={submitImage}
             >
               Upload
-            </button>
+            </button>}
+            
           </div>
           <div className="flex items-center">
             <img
