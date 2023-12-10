@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { AuthContext } from "../context/context";
+import avatar from "../../assets/images/avatar.jpg";
 
 const LeftSide = () => {
 
@@ -18,7 +19,7 @@ const LeftSide = () => {
         <div className="absolute -bottom-6">
           <Tippy content="Profile">
             <img
-              src="src\assets\images\avatar.jpg"
+              src={user?.photoURL || avatar}
               alt="avatar"
               size="md"
               className="flex w-[3rem] h-[3rem] rounded-md"

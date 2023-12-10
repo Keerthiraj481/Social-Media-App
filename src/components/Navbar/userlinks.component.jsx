@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
-import { Avatar } from "@material-tailwind/react";
 import { AuthContext } from "../context/context"; 
+import avatar from "../../assets/images/avatar.jpg";
 
 const UserLinks = () => {
 
@@ -61,7 +61,7 @@ const UserLinks = () => {
       <div className="mx-4 flex items-center" onClick={signOutUser}>
         <Tippy content="Sign Out">
           <img
-            src="src\assets\images\avatar.jpg"
+            src={user?.photoURL || avatar}
             alt="avatar"
             className="flex w-[3rem] h-[2.8rem] rounded-md"
           />

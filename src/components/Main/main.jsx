@@ -7,6 +7,7 @@ import { PostsReducer, postActions, postsStates } from "../context/reducer";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { Alert } from "@material-tailwind/react";
 import PostCard from "./postcard";
+import avatar from "../../assets/images/avatar.jpg";
 
 
 const Main = () => {
@@ -117,7 +118,7 @@ const Main = () => {
       <div className="flex flex-col py-4 w-full bg-white rounded-3xl shadow-lg">
         <div className="flex items-center border-b-2 border-gray-300 pb-4 pl-4 w-full">
           <img
-            src="src/assets/images/avatar.jpg"
+            src={user?.photoURL || avatar}
             alt="avatar"
             size="sm"
             variant="circular"
@@ -212,14 +213,14 @@ const Main = () => {
               <PostCard 
               key={index}
               logo={post.logo}
-              id={post.documentId}
+              id={post?.documentId}
               uid={post?.uid}
               name={post.name}
               email={post.email}
               image={post.image}
               text={post.text}
-              // timestamp={new Date(post?.timestamp?.toDate()?.toUTCString())
-              // }
+              timestamp={new Date(post?.timestamp?.toDate())?.toUTCString()
+              }
               >
               </PostCard>
             )
