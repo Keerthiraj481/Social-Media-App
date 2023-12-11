@@ -1,9 +1,6 @@
-import React, { useState } from "react";
-import { input } from "@material-tailwind/react";
-
+import React, { useContext, useState } from "react";
 
 const RightSide = () => {
-  const [input, setInput] = useState("");
 
   return (
     <div className="flex flex-col h-screen bg-white shadow-lg border-2 rounded-l-xl">
@@ -20,19 +17,6 @@ const RightSide = () => {
         pretty mellowed out on one of those perfect beach nights, watching the
         moon dance on the incoming surf.
       </p>
-      <div className="mx-2 mt-10">
-        <p className="font-roboto font-medium text-sm text-gray-700 no-underline tracking-normal leading-none">
-          Friends:{" "}
-        </p>
-        <input
-          className="border-0 outline-none mt-4"
-          name="input"
-          value={input}
-          type="text"
-          placeholder="Search Friends"
-          onChange={(e) => setInput(e.target.value)}
-        />
-      </div>
     </div>
   );
 };

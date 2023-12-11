@@ -25,6 +25,7 @@ import CommentSection from "./commentsection";
 
 
 
+
 const PostCard = ({ uid, id, logo, email, name, text, image, timestamp }) => {
 
   const { user } = useContext(AuthContext);
@@ -46,7 +47,7 @@ const PostCard = ({ uid, id, logo, email, name, text, image, timestamp }) => {
     setOpen(true);
   }
 
-  const addFriend = async () => {
+  const addUser = async () => {
     try {
       const q = query(collection(db, "users"), where("uid", "==", user?.uid));
       const doc = await getDocs(q);
@@ -138,18 +139,6 @@ const PostCard = ({ uid, id, logo, email, name, text, image, timestamp }) => {
                 Published: {timestamp}
               </p>
             </div>
-            {user?.uid !== uid && (
-              <div
-                onClick={addFriend}
-                className="w-full flex justify-end cursor-pointer mr-10"
-              >
-                <img
-                  src="src\assets\images\add-friend.png"
-                  alt="addFriend"
-                  className="hover:bg-blue-100 rounded-xl p-2 w-12 h-12"
-                />
-              </div>
-            )}
           </div>
           <div>
             <p className="ml-4 pb-4 font-roboto font-medium text-sm text-gray-700 no-underline tracking-normal leading-none">
