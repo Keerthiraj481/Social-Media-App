@@ -35,6 +35,8 @@ const PostCard = ({ uid, id, logo, email, name, text, image, timestamp }) => {
 
   const likesCollection = collection(db, "posts", id, "likes");
 
+  const singlePostDocument = doc(db, "posts", id)
+
   const { ADD_LIKE, HANDLE_ERROR } = postActions;
 
   const [open, setOpen] = useState(false);
@@ -81,6 +83,20 @@ const PostCard = ({ uid, id, logo, email, name, text, image, timestamp }) => {
       console.log(err.message);
     }
   }
+
+  const deletePost =async (e) => {
+    e.preventDefault();
+    try {
+      if(user?.uid === uid) {
+        await deleteDoc(singlePostDocument)
+      } else {
+        alert("you can't Delete other Users posts.!!!")
+      }
+    } catch (err) {
+      alert(err.message);
+      console.log(err.message);
+    }
+  };
 
 
   useEffect(() => {
@@ -159,7 +175,7 @@ const PostCard = ({ uid, id, logo, email, name, text, image, timestamp }) => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center cursor-pointer rounded-lg p-2 hover:bg-gray-100">
+            <div className="flex items-center cursor-pointer rounded-lg p-2 hover:bg-gray-100" onClick={deletePost}>
               <img src={remove} alt="delete" className="h-8 mr-4" />
               <p className="font-roboto font-medium text-md text-gray-700 no-underline tracking-normalleading-none">
                 Delete

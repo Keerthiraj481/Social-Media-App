@@ -5,7 +5,7 @@ const Comment = ({ name, comment, image }) => {
     return (
       <div className="flex items-center mt-2 w-full">
         <div className="mx-2">
-          <img src={image || avatar} alt="avatar" />
+          <img src={image || avatar} alt="avatar" className="w-[3rem] h-[3rem] rounded-3xl" />
         </div>
         <div className="flex flex-col items-start bg-gray-100 rounded-2xl p-1 max-w-[600px]">
           <p className="font-roboto text-black text-sm no-underline tracking-normal leading-none p-1 font-medium">
