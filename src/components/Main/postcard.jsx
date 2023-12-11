@@ -4,6 +4,7 @@ import avatar from "../../assets/images/avatar.jpg";
 import like from "../../assets/images/like.jpg";
 import comment from "../../assets/images/comment.jpg";
 import remove from "../../assets/images/delete.jpg";
+import addFriend from "../../assets/images/add-friend.png";
 import { AuthContext } from "../context/context";
 import { PostsReducer, postActions, postsStates } from "../context/reducer";
 import {
@@ -139,6 +140,18 @@ const PostCard = ({ uid, id, logo, email, name, text, image, timestamp }) => {
                 Published: {timestamp}
               </p>
             </div>
+            {user?.uid !== uid && (
+              <div
+                onClick={addUser}
+                className="w-full flex justify-end cursor-pointer mr-10"
+              >
+                <img
+                  className="hover:bg-blue-100 rounded-xl p-2 w-[3rem] h-[3rem]"
+                  src={addFriend}
+                  alt="addFriend"
+                ></img>
+              </div>
+            )}
           </div>
           <div>
             <p className="ml-4 pb-4 font-roboto font-medium text-sm text-gray-700 no-underline tracking-normal leading-none">
@@ -156,7 +169,10 @@ const PostCard = ({ uid, id, logo, email, name, text, image, timestamp }) => {
               <img src={like} alt="like" className="h-8 mr-4" />
               {state.likes?.length > 0 && state?.likes?.length}
             </button>
-            <div className="flex items-center cursor-pointer rounded-lg p-2 hover:bg-gray-100" onClick={handleOpen}>
+            <div
+              className="flex items-center cursor-pointer rounded-lg p-2 hover:bg-gray-100"
+              onClick={handleOpen}
+            >
               <div className="flex items-center cursor-pointer">
                 <img src={comment} alt="comment" className="h-8 mr-4" />
                 <p className="font-roboto font-medium text-md text-gray-700 no-underline tracking-normalleading-none">
@@ -164,7 +180,10 @@ const PostCard = ({ uid, id, logo, email, name, text, image, timestamp }) => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center cursor-pointer rounded-lg p-2 hover:bg-gray-100" onClick={deletePost}>
+            <div
+              className="flex items-center cursor-pointer rounded-lg p-2 hover:bg-gray-100"
+              onClick={deletePost}
+            >
               <img src={remove} alt="delete" className="h-8 mr-4" />
               <p className="font-roboto font-medium text-md text-gray-700 no-underline tracking-normalleading-none">
                 Delete
