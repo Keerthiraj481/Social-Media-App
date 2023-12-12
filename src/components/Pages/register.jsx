@@ -5,6 +5,8 @@ import * as Yup from "yup";
 import { ClipLoader } from "react-spinners/ClipLoader";
 import { AuthContext } from "../context/context";
 import { auth, onAuthStateChanged } from "../firebase/firebase";
+import logo from "../../assets/images/sh-logo.png";
+import register from "../../assets/images/register.jpg";
 
 const Register = () => {
 
@@ -58,7 +60,7 @@ const Register = () => {
               <div className="flex flex-col justify-center items-center py-[4rem]">
                 <div className="flex flex-row ">
                   <img
-                    src="src/assets/images/register.jpg"
+                    src={register}
                     alt="log-in"
                     className="w-[35rem] h-[25rem] rounded-xl mt-[1.5rem] mr-12 "
                   />
@@ -68,7 +70,7 @@ const Register = () => {
                         Welcome to,
                         <br />{" "}
                         <img
-                          src="src/assets/images/sh-logo.png"
+                          src={logo}
                           alt="logo"
                           className="w-[14rem] h-[4.5rem]"
                         />

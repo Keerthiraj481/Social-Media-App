@@ -86,7 +86,7 @@ const PostCard = ({ uid, id, logo, email, name, text, image, timestamp }) => {
     }
   }
 
-  const deletePost =async (e) => {
+  const deletePost = async (e) => {
     e.preventDefault();
     try {
       if(user?.uid === uid) {

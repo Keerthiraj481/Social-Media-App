@@ -8,6 +8,9 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import { Alert } from "@material-tailwind/react";
 import PostCard from "./postcard";
 import avatar from "../../assets/images/avatar.jpg";
+import addimage from "../../assets/images/addimage.png";
+import live from "../../assets/images/live.png";
+import happiness from "../../assets/images/happiness.png";
 
 
 const Main = () => {
@@ -160,7 +163,7 @@ const Main = () => {
               className="cursor-pointer flex items-center"
             >
               <img
-                src="src/assets/images/addimage.png"
+                src={addimage}
                 alt="addImage"
                 className="w-[3rem] h-10 mr-4"
               />
@@ -180,7 +183,7 @@ const Main = () => {
           </div>
           <div className="flex items-center">
             <img
-              src="src/assets/images/live.png"
+              src={live}
               alt="live"
               className="w-[2.5rem] h-[3rem] h-10 mr-4"
             />
@@ -190,7 +193,7 @@ const Main = () => {
           </div>
           <div className="flex items-center">
             <img
-              src="src/assets/images/happiness.png"
+              src={happiness}
               alt="feeling"
               className="h-10 mr-4 w-[2rem]"
             />
