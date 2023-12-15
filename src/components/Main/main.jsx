@@ -1,10 +1,29 @@
-import React, { useState, useRef, useContext, useReducer, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useContext,
+  useReducer,
+  useEffect,
+} from "react";
 import { Avatar, button } from "@material-tailwind/react";
 import { AuthContext } from "../context/context";
-import { doc, setDoc, collection, serverTimestamp, query, orderBy, onSnapshot } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  serverTimestamp,
+  query,
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { PostsReducer, postActions, postsStates } from "../context/reducer";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 import { Alert } from "@material-tailwind/react";
 import PostCard from "./postcard";
 import avatar from "../../assets/images/avatar.jpg";
@@ -12,10 +31,8 @@ import addimage from "../../assets/images/addimage.png";
 import live from "../../assets/images/live.png";
 import happiness from "../../assets/images/happiness.png";
 
-
 const Main = () => {
-
-  const {user, userData} = useContext(AuthContext);
+  const { user, userData } = useContext(AuthContext);
   const text = useRef("");
   const scrollRef = useRef("");
   const [image, setImage] = useState(null);
@@ -24,9 +41,8 @@ const Main = () => {
   const postRef = doc(collection(db, "posts"));
   const document = postRef.id;
   const [state, dispatch] = useReducer(PostsReducer, postsStates);
-  const {SUBMIT_POST, HANDLE_ERROR} = postActions;
-  const [progressBar, setProgressBar] = useState(0)
-
+  const { SUBMIT_POST, HANDLE_ERROR } = postActions;
+  const [progressBar, setProgressBar] = useState(0);
 
   const handleUpload = (e) => {
     setFile(e.target.files[0]);
@@ -34,8 +50,8 @@ const Main = () => {
 
   const handleSubmitPost = async (e) => {
     e.preventDefault();
-    if(text.current.value !== "") {
-    try {
+    if (text.current.value !== "") {
+      try {
         await setDoc(postRef, {
           documentId: document,
           uid: user?.uid || userData?.uid,
@@ -47,48 +63,58 @@ const Main = () => {
           timestamp: serverTimestamp(),
         });
         text.current.value = "";
-    } catch (err) {
+      } catch (err) {
+        dispatch({ type: HANDLE_ERROR });
+        alert(err.message);
+        console.log(err.message);
+      }
+    } else {
       dispatch({ type: HANDLE_ERROR });
-      alert(err.message);
-      console.log(err.message);
     }
-  }else {
-    dispatch({ type: HANDLE_ERROR });
-  }
   };
 
   const storage = getStorage();
 
   const metadata = {
-    contentType: ["image/jpeg", "image/jpg", "image/png","image/gif","image/svg+xml"],
+    contentType: [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/svg+xml",
+    ],
   };
 
   const submitImage = async () => {
     const fileType = metadata.contentType.includes(file["type"]);
     console.log("file", file);
     if (!file) return;
-    if(fileType) {
-      try{
+    if (fileType) {
+      try {
         const storageRef = ref(storage, `image/${file.name}`);
         const uploadTask = uploadBytesResumable(
-          storageRef, file, metadata.contentType
+          storageRef,
+          file,
+          metadata.contentType
         );
-        await uploadTask.on("state_changed", (snapshot) => {
-          const progress = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        await uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
             );
             setProgressBar(progress);
-        },
-        (error) => {
-          alert(error);
-        },
-        async () => {
-          await getDownloadURL(uploadTask.snapshot.ref).then(
-            (downloadURL) => {
-              setImage(downloadURL);
-            }
-          );
-        }
+          },
+          (error) => {
+            alert(error);
+          },
+          async () => {
+            await getDownloadURL(uploadTask.snapshot.ref).then(
+              (downloadURL) => {
+                setImage(downloadURL);
+              }
+            );
+          }
         );
       } catch (err) {
         dispatch({ type: HANDLE_ERROR });
@@ -97,7 +123,6 @@ const Main = () => {
       }
     }
   };
-
 
   useEffect(() => {
     const PostData = async () => {
@@ -127,21 +152,30 @@ const Main = () => {
             variant="circular"
             className="flex w-[3rem] h-[3rem] rounded-md"
           />
-          <form className="w-full" onSubmit = {handleSubmitPost}>
+          <form className="w-full" onSubmit={handleSubmitPost}>
             <div className="flex justify-between items-center">
               <div className="w-full ml-4">
                 <input
                   type="text"
                   name="text"
                   placeholder={`Whats on your mind ${
-                    user?.displayName?.split(" ")[0] || 
-                    userData?.name?.charAt(0).toUpperCase() + userData?.name?.slice(1)
-                }`}
+                    user?.displayName?.split(" ")[0] ||
+                    userData?.name?.charAt(0).toUpperCase() +
+                      userData?.name?.slice(1)
+                  }`}
                   className="outline-none w-full ml-4 bg-white rounded-md"
-                  ref = {text}
+                  ref={text}
                 />
               </div>
-              <div className="mx-4">{image && <img src={image} alt="previewImage" className="h-24 rounded-xl"></img>}</div>
+              <div className="mx-4">
+                {image && (
+                  <img
+                    src={image}
+                    alt="previewImage"
+                    className="h-24 rounded-xl"
+                  ></img>
+                )}
+              </div>
 
               <div className="mr-4">
                 <button
@@ -155,7 +189,10 @@ const Main = () => {
             </div>
           </form>
         </div>
-        <span style={{ width: `${progressBar}%` }} className="bg-blue-700 py-1 rounded-md"></span>
+        <span
+          style={{ width: `${progressBar}%` }}
+          className="bg-blue-700 py-1 rounded-md"
+        ></span>
         <div className="flex justify-around items-center pt-4">
           <div className="flex items-center">
             <label
@@ -167,19 +204,22 @@ const Main = () => {
                 alt="addImage"
                 className="w-[3rem] h-10 mr-4"
               />
-              <input 
-              type="file" id="addImage" 
-              style={{ display: "none" }}
-              onChange={handleUpload} />
+              <input
+                type="file"
+                id="addImage"
+                style={{ display: "none" }}
+                onChange={handleUpload}
+              />
             </label>
-            {file && <button
-              variant="text"
-              className="font-roboto font font-medium text-md text-gray-700 no-underline tracking-normal leading-none"
-              onClick={submitImage}
-            >
-              Upload
-            </button>}
-            
+            {file && (
+              <button
+                variant="text"
+                className="font-roboto font font-medium text-md text-gray-700 no-underline tracking-normal leading-none"
+                onClick={submitImage}
+              >
+                Upload
+              </button>
+            )}
           </div>
           <div className="flex items-center">
             <img
@@ -192,44 +232,40 @@ const Main = () => {
             </p>
           </div>
           <div className="flex items-center">
-            <img
-              src={happiness}
-              alt="feeling"
-              className="h-10 mr-4 w-[2rem]"
-            />
+            <img src={happiness} alt="feeling" className="h-10 mr-4 w-[2rem]" />
             <p className="font-roboto font font-medium text-dm text-gray-700 no-underline tracking-normal leading-none">
               Reaction
             </p>
           </div>
         </div>
       </div>
-      <div className="flex flex-col py-4 w-full">{state.error ? (
-      <div className="flex justify-center items-center">
-        <Alert color="red">
-          Something went wrong refresh and try again...
-        </Alert>
+      <div className="flex flex-col py-4 w-full">
+        {state.error ? (
+          <div className="flex justify-center items-center">
+            <Alert color="red">
+              Something went wrong refresh and try again...
+            </Alert>
+          </div>
+        ) : (
+          <div>
+            {state?.posts?.map((post, index) => {
+              return (
+                <PostCard
+                  key={index}
+                  logo={post.logo}
+                  id={post?.documentId}
+                  uid={post?.uid}
+                  name={post.name}
+                  email={post.email}
+                  image={post.image}
+                  text={post.text}
+                  timestamp={new Date(post?.timestamp?.toDate())?.toUTCString()}
+                ></PostCard>
+              );
+            })}
+          </div>
+        )}
       </div>
-      ) : (
-        <div>
-          {state.posts.length > 0 && state?.posts?.map((post, index) => {
-            return (
-              <PostCard 
-              key={index}
-              logo={post.logo}
-              id={post?.documentId}
-              uid={post?.uid}
-              name={post.name}
-              email={post.email}
-              image={post.image}
-              text={post.text}
-              timestamp={new Date(post?.timestamp?.toDate())?.toUTCString()
-              }
-              >
-              </PostCard>
-            )
-          })}
-        </div>
-      )}</div>
       <div ref={scrollRef}>{/* reference for */}</div>
     </div>
   );
