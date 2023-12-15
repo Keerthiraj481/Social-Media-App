@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useEffect,
 } from "react";
-import { Avatar, Button } from "@material-tailwind/react";
+import { Avatar, button } from "@material-tailwind/react";
 import { AuthContext } from "../context/context";
 import {
   doc,
@@ -24,6 +24,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { Alert } from "@material-tailwind/react";
 import PostCard from "./postcard";
 import avatar from "../../assets/images/avatar.jpg";
 import addimage from "../../assets/images/addimage.png";
@@ -42,11 +43,9 @@ const Main = () => {
   const [state, dispatch] = useReducer(PostsReducer, postsStates);
   const { SUBMIT_POST, HANDLE_ERROR } = postActions;
   const [progressBar, setProgressBar] = useState(0);
-
   const handleUpload = (e) => {
     setFile(e.target.files[0]);
   };
-
   const handleSubmitPost = async (e) => {
     e.preventDefault();
     if (text.current.value !== "") {
@@ -71,9 +70,7 @@ const Main = () => {
       dispatch({ type: HANDLE_ERROR });
     }
   };
-
   const storage = getStorage();
-
   const metadata = {
     contentType: [
       "image/jpeg",
@@ -83,7 +80,6 @@ const Main = () => {
       "image/svg+xml",
     ],
   };
-
   const submitImage = async () => {
     const fileType = metadata.contentType.includes(file["type"]);
     console.log("file", file);
@@ -122,9 +118,8 @@ const Main = () => {
       }
     }
   };
-
   useEffect(() => {
-    const PostData = async () => {
+    const postData = async () => {
       const q = query(collectionRef, orderBy("timestamp", "asc"));
       await onSnapshot(q, (doc) => {
         dispatch({
@@ -137,19 +132,19 @@ const Main = () => {
         setProgressBar(0);
       });
     };
-    return () => PostData();
+    return () => postData();
   }, [SUBMIT_POST]);
-
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-col py-4 w-full bg-white rounded-3xl shadow-lg">
         <div className="flex items-center border-b-2 border-gray-300 pb-4 pl-4 w-full">
-          <Avatar
-            size="sm"
-            variant="circular"
+          <img
             src={user?.photoURL || avatar}
             alt="avatar"
-          ></Avatar>
+            size="sm"
+            variant="circular"
+            className="flex w-[3rem] h-[3rem] rounded-md"
+          />
           <form className="w-full" onSubmit={handleSubmitPost}>
             <div className="flex justify-between items-center">
               <div className="w-full ml-4">
@@ -161,23 +156,27 @@ const Main = () => {
                     userData?.name?.charAt(0).toUpperCase() +
                       userData?.name?.slice(1)
                   }`}
-                  className="outline-none w-full bg-white rounded-md"
+                  className="outline-none w-full ml-4 bg-white rounded-md"
                   ref={text}
-                ></input>
+                />
               </div>
               <div className="mx-4">
                 {image && (
                   <img
-                    className="h-24 rounded-xl"
                     src={image}
                     alt="previewImage"
+                    className="h-24 rounded-xl"
                   ></img>
                 )}
               </div>
               <div className="mr-4">
-                <Button variant="text" type="submit">
+                <button
+                  variant="text"
+                  type="submit"
+                  className="text-blue-600 text-lg font-roboto"
+                >
                   Share
-                </Button>
+                </button>
               </div>
             </div>
           </form>
@@ -192,55 +191,71 @@ const Main = () => {
               htmlFor="addImage"
               className="cursor-pointer flex items-center"
             >
-              <img className="h-10 mr-4" src={addimage} alt="addImage"></img>
+              <img
+                src={addimage}
+                alt="addImage"
+                className="w-[3rem] h-10 mr-4"
+              />
               <input
-                id="addImage"
                 type="file"
+                id="addImage"
                 style={{ display: "none" }}
                 onChange={handleUpload}
-              ></input>
+              />
             </label>
             {file && (
-              <Button variant="text" onClick={submitImage}>
+              <button
+                variant="text"
+                className="font-roboto font font-medium text-md text-gray-700 no-underline tracking-normal leading-none"
+                onClick={submitImage}
+              >
                 Upload
-              </Button>
+              </button>
             )}
           </div>
           <div className="flex items-center">
-            <img className="h-10 mr-4" src={live} alt="live"></img>
-            <p className="font-roboto font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
+            <img
+              src={live}
+              alt="live"
+              className="w-[2.5rem] h-[3rem] h-10 mr-4"
+            />
+            <p className="font-roboto font font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
               Live
             </p>
           </div>
           <div className="flex items-center">
-            <img className="h-10 mr-4" src={happiness} alt="feeling"></img>
-            <p className="font-roboto font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
-              Feeling
+            <img
+              src={happiness}
+              alt="feeling"
+              className="h-10 mr-4 w-[2rem]"
+            />
+            <p className="font-roboto font font-medium text-dm text-gray-700 no-underline tracking-normal leading-none">
+              Reaction
             </p>
           </div>
         </div>
       </div>
       <div className="flex flex-col py-4 w-full">
-        {state?.error ? (
+        {state.error ? (
           <div className="flex justify-center items-center">
-            <p className="text-red-600 post-error">
+            <p className="text-red-700">
               Something went wrong refresh and try again...
             </p>
           </div>
         ) : (
           <div>
-            {state?.posts?.length > 0 &&
+            {state.posts.length > 0 &&
               state?.posts?.map((post, index) => {
                 return (
                   <PostCard
                     key={index}
-                    logo={post?.logo}
+                    logo={post.logo}
                     id={post?.documentId}
                     uid={post?.uid}
-                    name={post?.name}
-                    email={post?.email}
-                    image={post?.image}
-                    text={post?.text}
+                    name={post.name}
+                    email={post.email}
+                    image={post.image}
+                    text={post.text}
                     timestamp={new Date(
                       post?.timestamp?.toDate()
                     )?.toUTCString()}
@@ -250,9 +265,9 @@ const Main = () => {
           </div>
         )}
       </div>
-      <div ref={scrollRef}>{/* refference for later */}</div>
+      <div ref={scrollRef}>{/* reference for */}</div>
     </div>
   );
 };
-
 export default Main;
+
