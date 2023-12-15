@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useEffect,
 } from "react";
-import { Avatar, button } from "@material-tailwind/react";
+import { Avatar, Button } from "@material-tailwind/react";
 import { AuthContext } from "../context/context";
 import {
   doc,
@@ -145,13 +145,12 @@ const Main = () => {
     <div className="flex flex-col items-center">
       <div className="flex flex-col py-4 w-full bg-white rounded-3xl shadow-lg">
         <div className="flex items-center border-b-2 border-gray-300 pb-4 pl-4 w-full">
-          <img
-            src={user?.photoURL || avatar}
-            alt="avatar"
+          <Avatar
             size="sm"
             variant="circular"
-            className="flex w-[3rem] h-[3rem] rounded-md"
-          />
+            src={user?.photoURL || avatar}
+            alt="avatar"
+          ></Avatar>
           <form className="w-full" onSubmit={handleSubmitPost}>
             <div className="flex justify-between items-center">
               <div className="w-full ml-4">
@@ -163,28 +162,23 @@ const Main = () => {
                     userData?.name?.charAt(0).toUpperCase() +
                       userData?.name?.slice(1)
                   }`}
-                  className="outline-none w-full ml-4 bg-white rounded-md"
+                  className="outline-none w-full bg-white rounded-md"
                   ref={text}
-                />
+                ></input>
               </div>
               <div className="mx-4">
                 {image && (
                   <img
+                    className="h-24 rounded-xl"
                     src={image}
                     alt="previewImage"
-                    className="h-24 rounded-xl"
                   ></img>
                 )}
               </div>
-
               <div className="mr-4">
-                <button
-                  variant="text"
-                  type="submit"
-                  className="text-blue-600 text-lg font-roboto"
-                >
+                <Button variant="text" type="submit">
                   Share
-                </button>
+                </Button>
               </div>
             </div>
           </form>
@@ -199,67 +193,65 @@ const Main = () => {
               htmlFor="addImage"
               className="cursor-pointer flex items-center"
             >
-              <img
-                src={addimage}
-                alt="addImage"
-                className="w-[3rem] h-10 mr-4"
-              />
+              <img className="h-10 mr-4" src={addimage} alt="addImage"></img>
               <input
-                type="file"
                 id="addImage"
+                type="file"
                 style={{ display: "none" }}
                 onChange={handleUpload}
-              />
+              ></input>
             </label>
             {file && (
-              <button
-                variant="text"
-                className="font-roboto font font-medium text-md text-gray-700 no-underline tracking-normal leading-none"
-                onClick={submitImage}
-              >
+              <Button variant="text" onClick={submitImage}>
                 Upload
-              </button>
+              </Button>
             )}
           </div>
           <div className="flex items-center">
-            <img
-              src={live}
-              alt="live"
-              className="w-[2.5rem] h-[3rem] h-10 mr-4"
-            />
-            <p className="font-roboto font font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
+            <img className="h-10 mr-4" src={live} alt="live"></img>
+            <p className="font-roboto font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
               Live
             </p>
           </div>
           <div className="flex items-center">
-            <img src={happiness} alt="feeling" className="h-10 mr-4 w-[2rem]" />
-            <p className="font-roboto font font-medium text-dm text-gray-700 no-underline tracking-normal leading-none">
-              Reaction
+            <img className="h-10 mr-4" src={happiness} alt="feeling"></img>
+            <p className="font-roboto font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
+              Feeling
             </p>
           </div>
         </div>
       </div>
       <div className="flex flex-col py-4 w-full">
-        <div>
-          {state.posts.length > 0 &&
-            state?.posts?.map((post, index) => {
-              return (
-                <PostCard
-                  key={index}
-                  logo={post.logo}
-                  id={post?.documentId}
-                  uid={post?.uid}
-                  name={post.name}
-                  email={post.email}
-                  image={post.image}
-                  text={post.text}
-                  timestamp={new Date(post?.timestamp?.toDate())?.toUTCString()}
-                ></PostCard>
-              );
-            })}
-        </div>
+        {state?.error ? (
+          <div className="flex justify-center items-center">
+            <Alert color="red">
+              Something went wrong refresh and try again...
+            </Alert>
+          </div>
+        ) : (
+          <div>
+            {state?.posts?.length > 0 &&
+              state?.posts?.map((post, index) => {
+                return (
+                  <PostCard
+                    key={index}
+                    logo={post?.logo}
+                    id={post?.documentId}
+                    uid={post?.uid}
+                    name={post?.name}
+                    email={post?.email}
+                    image={post?.image}
+                    text={post?.text}
+                    timestamp={new Date(
+                      post?.timestamp?.toDate()
+                    )?.toUTCString()}
+                  ></PostCard>
+                );
+              })}
+          </div>
+        )}
       </div>
-      <div ref={scrollRef}>{/* reference for */}</div>
+      <div ref={scrollRef}>{/* refference for later */}</div>
     </div>
   );
 };
