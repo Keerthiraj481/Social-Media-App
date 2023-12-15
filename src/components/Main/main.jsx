@@ -240,15 +240,9 @@ const Main = () => {
         </div>
       </div>
       <div className="flex flex-col py-4 w-full">
-        {state.error ? (
-          <div className="flex justify-center items-center">
-            <Alert color="red">
-              Something went wrong refresh and try again...
-            </Alert>
-          </div>
-        ) : (
-          <div>
-            {state?.posts?.map((post, index) => {
+        <div>
+          {state.posts.length > 0 &&
+            state?.posts?.map((post, index) => {
               return (
                 <PostCard
                   key={index}
@@ -263,8 +257,7 @@ const Main = () => {
                 ></PostCard>
               );
             })}
-          </div>
-        )}
+        </div>
       </div>
       <div ref={scrollRef}>{/* reference for */}</div>
     </div>
