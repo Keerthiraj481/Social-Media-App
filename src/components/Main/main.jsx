@@ -24,7 +24,6 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { Alert } from "@material-tailwind/react";
 import PostCard from "./postcard";
 import avatar from "../../assets/images/avatar.jpg";
 import addimage from "../../assets/images/addimage.png";
@@ -224,9 +223,9 @@ const Main = () => {
       <div className="flex flex-col py-4 w-full">
         {state?.error ? (
           <div className="flex justify-center items-center">
-            <Alert color="red">
+            <p className="text-red-600">
               Something went wrong refresh and try again...
-            </Alert>
+            </p>
           </div>
         ) : (
           <div>

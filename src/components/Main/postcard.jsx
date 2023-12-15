@@ -1,5 +1,4 @@
 import React, { useContext, useReducer, useEffect, useState } from "react";
-import { Avatar } from "@material-tailwind/react";
 import avatar from "../../assets/images/avatar.jpg";
 import like from "../../assets/images/like.jpg";
 import comment from "../../assets/images/comment.jpg";
@@ -15,9 +14,7 @@ import {
   arrayUnion,
   deleteDoc,
   collection,
-  serverTimestamp,
   query,
-  orderBy,
   onSnapshot,
   where,
 } from "firebase/firestore";
