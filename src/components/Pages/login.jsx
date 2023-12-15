@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { AuthContext } from "../context/context";
 import { auth, onAuthStateChanged } from "../firebase/firebase";
+import login from "../../assets/images/log-in.avif";
 
 const Login = () => {
 
@@ -61,7 +62,7 @@ const Login = () => {
         <div className="flex flex-col justify-center items-center w-full">
           <div className="flex flex-row justify-center items-center w-full">
             <img
-              src="src/assets/images/log-in.avif"
+              src={login}
               alt="log-in"
               className=""
             />

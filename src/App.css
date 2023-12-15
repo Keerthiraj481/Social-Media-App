@@ -58,3 +58,7 @@
 .register-name {
   font-size: 2rem;
 }
+
+.post-error {
+  color: red;
+}

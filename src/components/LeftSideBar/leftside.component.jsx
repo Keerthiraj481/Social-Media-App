@@ -3,6 +3,12 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import { AuthContext } from "../context/context";
 import avatar from "../../assets/images/avatar.jpg";
+import nature from "../../assets/images/nature.jpg";
+import location from "../../assets/images/location.jpg";
+import job from "../../assets/images/job.jpg";
+import facebook from "../../assets/images/facebook.png";
+import twitter from "../../assets/images/twitter.png";
+import linkedin from "../../assets/images/linkedin.png";
 
 const LeftSide = () => {
 
@@ -13,7 +19,7 @@ const LeftSide = () => {
       <div className="flex flex-col items-center relative">
         <img
           className="h-28 w-full rounded-r-xl"
-          src="src\assets\images\nature.jpg"
+          src={nature}
           alt="nature"
         />
         <div className="absolute -bottom-6">
@@ -41,17 +47,17 @@ const LeftSide = () => {
       <div className="flex flex-col pl-2">
         <div className="flex items-center pb-2">
           <img
-            src="src\assets\images\location.jpg"
+            src={location}
             alt="location"
             className="h-10"
           />
           <p className="font-roboto font-bold text-lg no-underline tracking-normal leading-none">
-            California
+            India
           </p>
         </div>
         <div className="flex items-center">
           <img
-            src="src\assets\images\job.jpg"
+            src={job}
             alt="office_bag"
             className="h-10"
           />
@@ -80,7 +86,7 @@ const LeftSide = () => {
         </p>
         <div className="flex items-center">
           <img
-            src="src\assets\images\facebook.png"
+            src={facebook}
             alt="facebook"
             className="h-10 mb-3 mr-2"
           />
@@ -90,7 +96,7 @@ const LeftSide = () => {
         </div>
         <div className="flex items-center">
           <img
-            src="src\assets\images\twitter.png"
+            src={twitter}
             alt="twitter"
             className="h-10 mb-3 mr-2"
           />
@@ -100,7 +106,7 @@ const LeftSide = () => {
         </div>
         <div className="flex items-center">
           <img
-            src="src\assets\images\linkedin.png"
+            src={linkedin}
             alt="linkedin"
             className="h-10 mb-3 mr-2"
           />
