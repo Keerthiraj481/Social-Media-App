@@ -249,13 +249,13 @@ const Main = () => {
                 return (
                   <PostCard
                     key={index}
-                    logo={post.logo}
+                    logo={post?.logo}
                     id={post?.documentId}
                     uid={post?.uid}
-                    name={post.name}
-                    email={post.email}
-                    image={post.image}
-                    text={post.text}
+                    name={post?.name}
+                    email={post?.email}
+                    image={post?.image}
+                    text={post?.text}
                     timestamp={new Date(
                       post?.timestamp?.toDate()
                     )?.toUTCString()}
