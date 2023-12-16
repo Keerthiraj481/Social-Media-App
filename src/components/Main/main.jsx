@@ -121,20 +121,29 @@ const Main = () => {
   useEffect(() => {
     const postData = async () => {
       const q = query(collectionRef, orderBy("timestamp", "asc"));
+      try {
+        await onSnapshot(q, (doc) => {
+          doc.docs.forEach((item) => {
+            console.log(item.data());
+          });
 
-      await onSnapshot(q, (doc) => {
-        doc.docs.forEach((item) => {
-          console.log(item.data());
+          if (doc.docs.length) {
+            console.log(doc.docs.length);
+            dispatch({
+              type: SUBMIT_POST,
+              posts: doc.docs.map((item) => item.data()),
+            });
+          } else {
+            console.log(`No Data`);
+          }
+          scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+          setImage(null);
+          setFile(null);
+          setProgressBar(0);
         });
-        dispatch({
-          type: SUBMIT_POST,
-          posts: doc.docs.map((item) => item.data()),
-        });
-        scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
-        setImage(null);
-        setFile(null);
-        setProgressBar(0);
-      });
+      } catch (err) {
+        console.log(`Error while uploading`, err.message);
+      }
     };
     return () => postData();
   }, [SUBMIT_POST]);
