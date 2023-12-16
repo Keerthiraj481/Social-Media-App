@@ -121,7 +121,11 @@ const Main = () => {
   useEffect(() => {
     const postData = async () => {
       const q = query(collectionRef, orderBy("timestamp", "asc"));
+
       await onSnapshot(q, (doc) => {
+        doc.docs.forEach((item) => {
+          console.log(item.data());
+        });
         dispatch({
           type: SUBMIT_POST,
           posts: doc.docs.map((item) => item.data()),
@@ -214,21 +218,13 @@ const Main = () => {
             )}
           </div>
           <div className="flex items-center">
-            <img
-              src={live}
-              alt="live"
-              className="w-[2.5rem] h-[3rem] h-10 mr-4"
-            />
+            <img src={live} alt="live" className="w-[2.5rem] h-[3rem] mr-4" />
             <p className="font-roboto font font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
               Live
             </p>
           </div>
           <div className="flex items-center">
-            <img
-              src={happiness}
-              alt="feeling"
-              className="h-10 mr-4 w-[2rem]"
-            />
+            <img src={happiness} alt="feeling" className="h-10 mr-4 w-[2rem]" />
             <p className="font-roboto font font-medium text-dm text-gray-700 no-underline tracking-normal leading-none">
               Reaction
             </p>
@@ -270,4 +266,3 @@ const Main = () => {
   );
 };
 export default Main;
-
