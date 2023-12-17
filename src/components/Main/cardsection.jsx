@@ -1,5 +1,5 @@
 import React from "react";
-import { cardData } from "/src/assets/cardData.jsx";
+import { cardData } from "../../assets/cardData";
 import Card from "./card";
 
 const CardSection = () => {
