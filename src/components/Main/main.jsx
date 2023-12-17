@@ -142,7 +142,7 @@ const Main = () => {
           setProgressBar(0);
         });
       } catch (err) {
-        console.log(`Error while uploading`, err.message);
+        console.log(`Error while uploading`, err.message)
       }
     };
     return () => postData();

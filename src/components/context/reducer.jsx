@@ -13,10 +13,8 @@ export const postsStates = {
 };
 
 export const PostsReducer = (state, action) => {
-  console.log(action.type);
   switch (action.type) {
     case postActions.SUBMIT_POST:
-      console.log(`Hit`);
       return {
         ...state,
         error: false,
