@@ -5,7 +5,12 @@ import React, {
   useReducer,
   useEffect,
 } from "react";
-import { Avatar, button } from "@material-tailwind/react";
+import { Avatar } from "@material-tailwind/react";
+import avatar from "../../assets/images/avatar.jpg";
+import { Button } from "@material-tailwind/react";
+import live from "../../assets/images/live.png";
+import smile from "../../assets/images/happiness.png";
+import addImage from "../../assets/images/addimage.png";
 import { AuthContext } from "../context/context";
 import {
   doc,
@@ -17,7 +22,11 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import { PostsReducer, postActions, postsStates } from "../context/reducer";
+import {
+  PostsReducer,
+  postActions,
+  postsStates,
+} from "../context/reducer";
 import {
   getStorage,
   ref,
@@ -26,10 +35,6 @@ import {
 } from "firebase/storage";
 import { Alert } from "@material-tailwind/react";
 import PostCard from "./postcard";
-import avatar from "../../assets/images/avatar.jpg";
-import addimage from "../../assets/images/addimage.png";
-import live from "../../assets/images/live.png";
-import happiness from "../../assets/images/happiness.png";
 
 const Main = () => {
   const { user, userData } = useContext(AuthContext);
@@ -43,9 +48,11 @@ const Main = () => {
   const [state, dispatch] = useReducer(PostsReducer, postsStates);
   const { SUBMIT_POST, HANDLE_ERROR } = postActions;
   const [progressBar, setProgressBar] = useState(0);
+
   const handleUpload = (e) => {
     setFile(e.target.files[0]);
   };
+
   const handleSubmitPost = async (e) => {
     e.preventDefault();
     if (text.current.value !== "") {
@@ -54,7 +61,7 @@ const Main = () => {
           documentId: document,
           uid: user?.uid || userData?.uid,
           logo: user?.photoURL,
-          name: user?.display || userData?.name,
+          name: user?.displayName || userData?.name,
           email: user?.email || userData?.email,
           text: text.current.value,
           image: image,
@@ -70,7 +77,9 @@ const Main = () => {
       dispatch({ type: HANDLE_ERROR });
     }
   };
+
   const storage = getStorage();
+
   const metadata = {
     contentType: [
       "image/jpeg",
@@ -80,13 +89,13 @@ const Main = () => {
       "image/svg+xml",
     ],
   };
+
   const submitImage = async () => {
     const fileType = metadata.contentType.includes(file["type"]);
-    console.log("file", file);
     if (!file) return;
     if (fileType) {
       try {
-        const storageRef = ref(storage, `image/${file.name}`);
+        const storageRef = ref(storage, `images/${file.name}`);
         const uploadTask = uploadBytesResumable(
           storageRef,
           file,
@@ -118,46 +127,34 @@ const Main = () => {
       }
     }
   };
+
   useEffect(() => {
     const postData = async () => {
       const q = query(collectionRef, orderBy("timestamp", "asc"));
-      try {
-        await onSnapshot(q, (doc) => {
-          doc.docs.forEach((item) => {
-            console.log(item.data());
-          });
-
-          if (doc.docs.length) {
-            console.log(doc.docs.length);
-            dispatch({
-              type: SUBMIT_POST,
-              posts: doc.docs.map((item) => item.data()),
-            });
-          } else {
-            console.log(`No Data`);
-          }
-          scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
-          setImage(null);
-          setFile(null);
-          setProgressBar(0);
+      await onSnapshot(q, (doc) => {
+        dispatch({
+          type: SUBMIT_POST,
+          posts: doc?.docs?.map((item) => item?.data()),
         });
-      } catch (err) {
-        console.log(`Error while uploading`, err.message)
-      }
+        scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+        setImage(null);
+        setFile(null);
+        setProgressBar(0);
+      });
     };
     return () => postData();
   }, [SUBMIT_POST]);
+
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-col py-4 w-full bg-white rounded-3xl shadow-lg">
         <div className="flex items-center border-b-2 border-gray-300 pb-4 pl-4 w-full">
-          <img
-            src={user?.photoURL || avatar}
-            alt="avatar"
+          <Avatar
             size="sm"
             variant="circular"
-            className="flex w-[3rem] h-[3rem] rounded-md"
-          />
+            src={user?.photoURL || avatar}
+            alt="avatar"
+          ></Avatar>
           <form className="w-full" onSubmit={handleSubmitPost}>
             <div className="flex justify-between items-center">
               <div className="w-full ml-4">
@@ -169,27 +166,23 @@ const Main = () => {
                     userData?.name?.charAt(0).toUpperCase() +
                       userData?.name?.slice(1)
                   }`}
-                  className="outline-none w-full ml-4 bg-white rounded-md"
+                  className="outline-none w-full bg-white rounded-md"
                   ref={text}
-                />
+                ></input>
               </div>
               <div className="mx-4">
                 {image && (
                   <img
+                    className="h-24 rounded-xl"
                     src={image}
                     alt="previewImage"
-                    className="h-24 rounded-xl"
                   ></img>
                 )}
               </div>
               <div className="mr-4">
-                <button
-                  variant="text"
-                  type="submit"
-                  className="text-blue-600 text-lg font-roboto"
-                >
+                <Button variant="text" type="submit">
                   Share
-                </button>
+                </Button>
               </div>
             </div>
           </form>
@@ -204,52 +197,44 @@ const Main = () => {
               htmlFor="addImage"
               className="cursor-pointer flex items-center"
             >
-              <img
-                src={addimage}
-                alt="addImage"
-                className="w-[3rem] h-10 mr-4"
-              />
+              <img className="h-10 mr-4" src={addImage} alt="addImage"></img>
               <input
-                type="file"
                 id="addImage"
+                type="file"
                 style={{ display: "none" }}
                 onChange={handleUpload}
-              />
+              ></input>
             </label>
             {file && (
-              <button
-                variant="text"
-                className="font-roboto font font-medium text-md text-gray-700 no-underline tracking-normal leading-none"
-                onClick={submitImage}
-              >
+              <Button variant="text" onClick={submitImage}>
                 Upload
-              </button>
+              </Button>
             )}
           </div>
           <div className="flex items-center">
-            <img src={live} alt="live" className="w-[2.5rem] h-[3rem] mr-4" />
-            <p className="font-roboto font font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
+            <img className="h-10 mr-4" src={live} alt="live"></img>
+            <p className="font-roboto font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
               Live
             </p>
           </div>
           <div className="flex items-center">
-            <img src={happiness} alt="feeling" className="h-10 mr-4 w-[2rem]" />
-            <p className="font-roboto font font-medium text-dm text-gray-700 no-underline tracking-normal leading-none">
-              Reaction
+            <img className="h-10 mr-4" src={smile} alt="feeling"></img>
+            <p className="font-roboto font-medium text-md text-gray-700 no-underline tracking-normal leading-none">
+              Feeling
             </p>
           </div>
         </div>
       </div>
       <div className="flex flex-col py-4 w-full">
-        {state.error ? (
+        {state?.error ? (
           <div className="flex justify-center items-center">
-            <p className="text-red-700">
+            <Alert color="red">
               Something went wrong refresh and try again...
-            </p>
+            </Alert>
           </div>
         ) : (
           <div>
-            {state.posts.length > 0 &&
+            {state?.posts?.length > 0 &&
               state?.posts?.map((post, index) => {
                 return (
                   <PostCard
@@ -270,8 +255,9 @@ const Main = () => {
           </div>
         )}
       </div>
-      <div ref={scrollRef}>{/* reference for */}</div>
+      <div ref={scrollRef}>{/* refference for later */}</div>
     </div>
   );
 };
+
 export default Main;
